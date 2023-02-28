@@ -123,7 +123,7 @@ function processGSheetResults(
 }
 
 const gsheetProcessor = function (options, callback, onError) {
-  const {apiKey, sheetId, sheetName, sheetNumber, returnAllResults, filter, filterOptions} = options
+  const {apiKey, sheetId, sheetName, sheetNumber, returnAllResults, filter, filterOptions, cellRange} = options
 
   if(!options.apiKey || options.apiKey === undefined) {
     throw new Error('Missing Sheets API key');
@@ -133,7 +133,8 @@ const gsheetProcessor = function (options, callback, onError) {
     apiKey,
     sheetId,
     sheetName,
-    sheetNumber
+    sheetNumber,
+    range
   })
     .then(result => {
       const filteredResults = processGSheetResults(
