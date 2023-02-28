@@ -63,7 +63,6 @@ typings/
 .DS_Store
 node_modules
 dist
-build
 .vscode/launch.json
 *.cache
 .cache/
