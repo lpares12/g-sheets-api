@@ -77,10 +77,16 @@ function processGSheetResults(
   JSONResponse,
   returnAllResults,
   filter,
-  filterOptions
+  filterOptions,
+  isRanged,
 ) {
   const data = JSONResponse.values;
   const startRow = 1; // skip the header row(1), don't need it
+
+  if(isRanged){
+    //When there is a range, return uncurated
+    return data;
+  }
 
   let processedResults = [{}];
   let colNames = {};
@@ -123,7 +129,7 @@ function processGSheetResults(
 }
 
 const gsheetProcessor = function (options, callback, onError) {
-  const {apiKey, sheetId, sheetName, sheetNumber, returnAllResults, filter, filterOptions, cellRange} = options
+  const {apiKey, sheetId, sheetName, sheetNumber, returnAllResults, filter, filterOptions, range} = options
 
   if(!options.apiKey || options.apiKey === undefined) {
     throw new Error('Missing Sheets API key');
@@ -144,7 +150,8 @@ const gsheetProcessor = function (options, callback, onError) {
         filterOptions || {
           operator: 'or',
           matching: 'loose'
-        }
+        },
+        (range) ? true : false
       );
 
       callback(filteredResults);

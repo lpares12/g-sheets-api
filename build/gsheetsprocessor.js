@@ -65,10 +65,14 @@ function filterResults(resultsToFilter, filter, options) {
     return addRow;
   });
 }
-function processGSheetResults(JSONResponse, returnAllResults, filter, filterOptions) {
+function processGSheetResults(JSONResponse, returnAllResults, filter, filterOptions, isRanged) {
   var data = JSONResponse.values;
   var startRow = 1; // skip the header row(1), don't need it
 
+  if (isRanged) {
+    //When there is a range, return uncurated
+    return data;
+  }
   var processedResults = [{}];
   var colNames = {};
   for (var i = 0; i < data.length; i++) {
@@ -112,7 +116,7 @@ var gsheetProcessor = function gsheetProcessor(options, callback, onError) {
     returnAllResults = options.returnAllResults,
     filter = options.filter,
     filterOptions = options.filterOptions,
-    cellRange = options.cellRange;
+    range = options.range;
   if (!options.apiKey || options.apiKey === undefined) {
     throw new Error('Missing Sheets API key');
   }
@@ -126,7 +130,7 @@ var gsheetProcessor = function gsheetProcessor(options, callback, onError) {
     var filteredResults = processGSheetResults(result, returnAllResults || false, filter || false, filterOptions || {
       operator: 'or',
       matching: 'loose'
-    });
+    }, range ? true : false);
     callback(filteredResults);
   }).catch(function (err) {
     return onError(err.message);

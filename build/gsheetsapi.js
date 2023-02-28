@@ -16,7 +16,7 @@ var gsheetsAPI = function gsheetsAPI(_ref) {
     range = _ref$range === void 0 ? '' : _ref$range;
   try {
     var sheetNameStr = sheetName && sheetName !== '' ? encodeURIComponent(sheetName) : "Sheet".concat(sheetNumber);
-    var rangeStr = range !== '' ? '!' + rangeStr : '';
+    var rangeStr = range !== '' ? '!' + range : '';
     var sheetsUrl = "https://sheets.googleapis.com/v4/spreadsheets/".concat(sheetId, "/values/").concat(sheetNameStr).concat(rangeStr, "?dateTimeRenderOption=FORMATTED_STRING&majorDimension=ROWS&valueRenderOption=FORMATTED_VALUE&key=").concat(apiKey);
     return (0, _crossFetch.default)(sheetsUrl).then(function (response) {
       if (!response.ok) {
